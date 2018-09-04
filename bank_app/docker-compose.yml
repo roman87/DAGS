@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  database:
+    image: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    container_name: postgres_container
+    environment:
+      POSTGRES_PASSWORD: postgres
+  airflow:
+    build: ./dag_app
+    container_name: airflow_container
+    stdin_open: true
+    tty: true
+    links:
+     - database
+    depends_on:
+      - database
